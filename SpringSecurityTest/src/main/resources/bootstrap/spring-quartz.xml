@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+            http://www.springframework.org/schema/beans/spring-beans.xsd">
+    
+    <!--<bean id="targetObject" class="com.bestinfo.prizenumchartserver.job.DealK3GameFormPrizeNumJob" />-->
+    <!---->
+    <!--<bean name="dealK3GamePrizeNumJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="targetObject" />  -->
+        <!--<property name="targetMethod" value="deal" />-->
+    <!--</bean>   -->
+    <!---->
+    <!--<bean id="dealK3GamePrizeNumJobCronTrigger"  class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">-->
+        <!--<property name="jobDetail" ref="dealK3GamePrizeNumJob" />-->
+        <!--<property name="cronExpression" value="${quartz.cronExpression.dealK3GamePrizeNumJob}" />-->
+    <!--</bean> -->
+    <!---->
+    <!--<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  -->
+        <!--<property name="jobDetails">  -->
+            <!--<list>  -->
+                <!--<ref bean="dealK3GamePrizeNumJob" />-->
+            <!--</list>  -->
+        <!--</property>  -->
+   <!---->
+        <!--<property name="triggers">  -->
+            <!--<list>-->
+                <!--<ref bean="dealK3GamePrizeNumJobCronTrigger" />-->
+            <!--</list>  -->
+        <!--</property>  -->
+        <!--<property name="autoStartup" value="true"/>-->
+    <!--</bean>  -->
+    
+</beans>
+

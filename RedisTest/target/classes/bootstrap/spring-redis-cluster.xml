@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" 
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal" value="${jedis.pool.maxTotal}"/>
+        <property name="maxIdle" value="${jedis.pool.maxIdle}"/>
+        <property name="minIdle" value="${jedis.pool.minIdle}"/>
+        <property name="maxWaitMillis" value="${jedis.pool.maxWaitMillis}"/>
+    </bean>
+    
+    <bean id="jedisCluster" class="redis.clients.jedis.JedisCluster">
+        <constructor-arg>
+            <list>
+                <bean class="redis.clients.jedis.HostAndPort">
+                    <constructor-arg value="${redis.cluster.host1}"/>
+                    <constructor-arg value="${redis.cluster.port1}" type="int"/>
+                </bean>
+                <bean class="redis.clients.jedis.HostAndPort">
+                    <constructor-arg value="${redis.cluster.host2}"/>
+                    <constructor-arg value="${redis.cluster.port2}" type="int"/>
+                </bean>
+            </list>
+        </constructor-arg>
+        <constructor-arg ref="jedisPoolConfig"/>
+    </bean>
+</beans>

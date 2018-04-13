@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource">
+            <ref bean="druidDataSource" />
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="javax.persistence.validation.mode">none</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
+                <prop key="hibernate.format_sql">true</prop>
+            </props>
+        </property>
+        <property name="packagesToScan" value="com.sct.hibernatetest.entity" />
+        <!--<property name="mappingLocations" value="classpath:map/*.hbm.xml"></property>-->
+    </bean>
+
+    <bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <bean id="userInfoCurrentSessionTxDao" class="com.sct.hibernatetest.dao.impl.UserInfoCurrentSessionTxDao">
+        <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+
+    <!--单个DAO设置-->
+    <!--<bean id="transactionProxyFactoryBean"-->
+          <!--class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">-->
+
+        <!--<property name="transactionManager" ref="transactionManager" />-->
+        <!--<property name="target" ref="userInfoCurrentSessionTxDao" />-->
+        <!--<property name="proxyInterfaces" value="com.sct.hibernatetest.dao.IUserInfoCurrentSessionDao" />-->
+
+        <!--<property name="transactionAttributes">-->
+            <!--<props>-->
+                <!--<prop key="*">PROPAGATION_REQUIRED</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--多个DAO设置-->
+    <!--<bean id="transactionProxyFactoryBean"-->
+          <!--class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"-->
+          <!--lazy-init="true" abstract="true">-->
+
+        <!--<property name="transactionManager" ref="transactionManager" />-->
+
+        <!--<property name="transactionAttributes">-->
+            <!--<props>-->
+                <!--<prop key="*">PROPAGATION_REQUIRED</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean id="userDaoTransactionProxyFactoryBean" parent="transactionProxyFactoryBean" >-->
+        <!--<property name="target" ref="userInfoDao" />-->
+    <!--</bean>-->
+
+    <!--拦截器-->
+    <!--<bean id="transactionInterceptor"-->
+          <!--class="org.springframework.transaction.interceptor.TransactionInterceptor">-->
+        <!--<property name="transactionManager" ref="transactionManager" />-->
+
+        <!--<property name="transactionAttributes">-->
+            <!--<props>-->
+                <!--<prop key="*">PROPAGATION_REQUIRED</prop>-->
+            <!--</props>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">-->
+        <!--<property name="beanNames">-->
+            <!--<list>-->
+                <!--<value>userInfoDao</value>-->
+            <!--</list>-->
+        <!--</property>-->
+        <!--<property name="interceptorNames">-->
+            <!--<list>-->
+                <!--<value>transactionInterceptor</value>-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
+
+    <!--声名-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="*" propagation="REQUIRED" />
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config proxy-target-class="true">
+        <aop:pointcut id="interceptorPointCuts"
+                      expression="execution(* com.sct.hibernatetest.dao.impl.UserInfoCurrentSessionTxDao.*(..))" />
+        <aop:advisor advice-ref="txAdvice"
+                     pointcut-ref="interceptorPointCuts" />
+    </aop:config>
+
+    <!--全注解-->
+    <!--<context:annotation-config />-->
+    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
+
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="save*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="delete*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="update*" propagation="REQUIRED"/>-->
+            <!--<tx:method name="get*" read-only="true" propagation="NOT_SUPPORTED"/>-->
+            <!--<tx:method name="*" read-only="true"/>-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--<aop:config proxy-target-class="true">-->
+        <!--<aop:pointcut id="interceptorPointCuts"-->
+                      <!--expression="execution(* com.sct.hibernatetest.dao.impl.UserInfoCurrentSessionTxDao.*(..))"/>-->
+        <!--<aop:advisor pointcut-ref="interceptorPointCuts" advice-ref="txAdvice"/>-->
+    <!--</aop:config>-->
+</beans>

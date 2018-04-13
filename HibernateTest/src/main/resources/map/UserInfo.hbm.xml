@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.sct.hibernatetest.entity.UserInfo" table="t_user_info">
+        <id name="id">
+            <generator class="uuid"></generator>
+        </id>
+        <property name="name"></property>
+        <property name="password"></property>
+        <property name="realName" column="real_name"></property>
+        <property name="idCard" column="id_card"></property>
+        <property name="phoneNum" column="phone_num"></property>
+        <property name="registerDate" column="register_date" type="timestamp"></property>
+        <property name="lastViewDate" column="last_view_date" type="timestamp"></property>
+    </class>
+
+</hibernate-mapping>
