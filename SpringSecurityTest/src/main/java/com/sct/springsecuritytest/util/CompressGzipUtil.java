@@ -1,4 +1,4 @@
-package com.sct.mailsecurityscanserver.util;
+package com.sct.springsecuritytest.util;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

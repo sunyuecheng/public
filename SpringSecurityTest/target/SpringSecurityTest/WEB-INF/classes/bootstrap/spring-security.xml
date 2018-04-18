@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+    <security:http pattern="/login" create-session="stateless" entry-point-ref="serviceUnauthorizedEntryPoint">
+        <security:csrf disabled="true"/>
+        <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER" />
+    </security:http>
+
+    <security:http pattern="/**" create-session="stateless" entry-point-ref="serviceUnauthorizedEntryPoint">
+        <security:csrf disabled="true"/>
+        <security:custom-filter ref="jwtAuthenticationTokenFilter" before="FORM_LOGIN_FILTER" />
+    </security:http>
+
+    <bean id="userDetailsService" class="com.sct.springsecuritytest.security.UserDetailsServiceImpl"/>
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref='userDetailsService'/>
+    </security:authentication-manager>
+
+    <bean id="jwtAuthenticationTokenFilter" class="com.sct.springsecuritytest.filter.JwtAuthenticationTokenFilter"/>
+
+    <bean id="jwtAuthenticationFilter" class="com.sct.springsecuritytest.filter.JwtAuthenticationFilter">
+        <constructor-arg name="url" value="/login"/>
+        <constructor-arg name="authManager" ref="authenticationManager"/>
+    </bean>
+
+    <bean id="serviceUnauthorizedEntryPoint" class="com.sct.springsecuritytest.security.ServiceUnauthorizedEntryPoint"/>
+
+
+</beans>

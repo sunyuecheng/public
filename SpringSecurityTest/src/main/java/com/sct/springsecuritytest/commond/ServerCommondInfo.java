@@ -1,4 +1,4 @@
-package com.sct.mailsecurityscanserver.commond;
+package com.sct.springsecuritytest.commond;
 
 import java.io.Serializable;
 

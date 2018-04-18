@@ -1,4 +1,4 @@
-package com.sct.mailsecurityscanserver.initialize;
+package com.sct.springsecuritytest.initialize;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;

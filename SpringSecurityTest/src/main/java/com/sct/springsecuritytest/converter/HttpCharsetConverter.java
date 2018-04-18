@@ -1,4 +1,4 @@
-package com.sct.mailsecurityscanserver.converter;
+package com.sct.springsecuritytest.converter;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

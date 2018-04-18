@@ -1,61 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns="http://www.springframework.org/schema/beans"
-       xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
             http://www.springframework.org/schema/beans/spring-beans.xsd
-            http://www.springframework.org/schema/aop
-            http://www.springframework.org/schema/aop/spring-aop.xsd">
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/security
+            http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
-        <property name="slowSqlMillis" value="${druid.monitor.slowSqlMillis}"/>
-        <property name="logSlowSql" value="${druid.monitor.logSlowSql}"/>
+    <security:global-method-security pre-post-annotations="enabled"/>
+
+    <security:http pattern="/login" create-session="stateless" entry-point-ref="serviceUnauthorizedEntryPoint">
+        <security:csrf disabled="true"/>
+        <security:custom-filter ref="jwtAuthenticationFilter" before="FORM_LOGIN_FILTER" />
+    </security:http>
+
+    <security:http pattern="/**" create-session="stateless" entry-point-ref="serviceUnauthorizedEntryPoint">
+        <security:csrf disabled="true"/>
+        <security:custom-filter ref="jwtAuthenticationTokenFilter" before="FORM_LOGIN_FILTER" />
+    </security:http>
+
+    <bean id="userDetailsService" class="com.sct.springsecuritytest.service.impl.UserDetailsServiceImpl"/>
+    <security:authentication-manager alias="authenticationManager">
+        <security:authentication-provider user-service-ref='userDetailsService'/>
+    </security:authentication-manager>
+
+    <bean id="jwtAuthenticationTokenFilter" class="com.sct.springsecuritytest.filter.JwtAuthenticationTokenFilter"/>
+
+    <bean id="jwtAuthenticationFilter" class="com.sct.springsecuritytest.filter.JwtAuthenticationFilter">
+        <constructor-arg name="url" value="/login"/>
+        <constructor-arg name="authManager" ref="authenticationManager"/>
     </bean>
 
-    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
-        <property name="dataSourceLogEnabled" value="true" />
-        <property name="statementExecutableSqlLogEnable" value="true" />
-    </bean>
+    <bean id="serviceUnauthorizedEntryPoint" class="com.sct.springsecuritytest.security.ServiceUnauthorizedEntryPoint"/>
 
-    <bean id="druidDataSource" destroy-method="close" init-method="init" class="com.alibaba.druid.pool.DruidDataSource" >
-        <property name="driverClassName" value="${jdbc.connection.driverClassName}"/>
-        <property name="url" value="${druid.pool.url}"/>
-        <property name="username" value="${druid.pool.username}"/>
-        <property name="password" value="${druid.pool.password}"/>
-        <property name="filters" value="${druid.pool.filters}"/>
-        <property name="maxActive" value="${druid.pool.maxActive}"/>
-        <property name="initialSize" value="${druid.pool.initialSize}"/>
-        <property name="maxWait" value="${druid.pool.maxWait}"/>
-        <property name="minIdle" value="${druid.pool.minIdle}"/>
-        <property name="timeBetweenEvictionRunsMillis" value="${druid.pool.timeBetweenEvictionRunsMillis}"/>
-        <property name="minEvictableIdleTimeMillis" value="${druid.pool.minEvictableIdleTimeMillis}"/>
-        <property name="validationQuery" value="${druid.pool.validationQuery}"/>
-        <property name="testWhileIdle" value="${druid.pool.testWhileIdle}"/>
-        <property name="testOnBorrow" value="${druid.pool.testOnBorrow}"/>
-        <property name="testOnReturn" value="${druid.pool.testOnReturn}"/>
-        <property name="poolPreparedStatements" value="${druid.pool.poolPreparedStatements}"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.pool.maxPoolPreparedStatementPerConnectionSize}"/>
-        <property name="proxyFilters">
-            <list>
-                <ref bean="stat-filter"/>
-                <ref bean="log-filter"/>
-            </list>
-        </property>
-    </bean>
-
-    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
-    </bean>
-    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
-        <property name="patterns">
-            <list>
-                <value>com.sct.mailsecurityscanserver.dao.*</value>
-            </list>
-        </property>
-    </bean>
-
-    <aop:config proxy-target-class="true">
-        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
-    </aop:config>
 
 </beans>

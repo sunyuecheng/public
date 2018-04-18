@@ -1,7 +1,6 @@
 package com.sct.mybatistest;
 
 import com.sct.mybatistest.dao.impl.UserInfoDao;
-import com.sct.mybatistest.entity.UserInfo;
 import com.sct.mybatistest.service.impl.UserInfoService;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;

@@ -1,4 +1,4 @@
-package com.sct.mailsecurityscanserver.servlet;
+package com.sct.springsecuritytest.servlet;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -36,8 +36,8 @@ public class AppServlet extends HttpServlet {
         OutputStream output = response.getOutputStream();
         DataOutputStream dataWritter = new DataOutputStream(output);
         
-        logger.error("Receive request data error,ip addr(" + request.getRemoteAddr() + ")!");
-        dataWritter.write("Request format error!".getBytes());
+        logger.error("Receive request data error,ip addr(" + request.getRemoteAddr() + ").");
+        dataWritter.write("Request format error.".getBytes());
         dataWritter.flush();
         dataWritter.close();
     }

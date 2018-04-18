@@ -1,7 +1,6 @@
 package com.sct.mybatistest.service.impl;
 
 import com.sct.mybatistest.dao.impl.UserInfoCurrentSessionTxDao;
-import com.sct.mybatistest.entity.UserInfo;
 import com.sct.mybatistest.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

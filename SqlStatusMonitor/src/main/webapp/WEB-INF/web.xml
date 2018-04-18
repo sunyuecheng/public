@@ -1,0 +1,36 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+
+  <servlet>
+    <servlet-name>DruidStatView</servlet-name>
+    <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+
+    <init-param>
+      <param-name>jmxUrl</param-name>
+      <param-value>service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/jmxrmi</param-value>
+    </init-param>
+    <init-param>
+      <param-name>loginUsername</param-name>
+      <param-value>admin</param-value>
+    </init-param>
+    <init-param>
+      <param-name>loginPassword</param-name>
+      <param-value>admin</param-value>
+    </init-param>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DruidStatView</servlet-name>
+    <url-pattern>/druid/*</url-pattern>
+  </servlet-mapping>
+
+  <!--Djava.net.preferIPv4Stack=true-->
+  <!-- -Dcom.sun.management.jmxremote-->
+  <!-- -Djava.rmi.server.hostname=192.168.10.89-->
+  <!-- -Dcom.sun.management.jmxremote.port=9876-->
+  <!-- -Dcom.sun.management.jmxremote.authenticate=false-->
+  <!-- -Dcom.sun.management.jmxremote.ssl=false-->
+</web-app>

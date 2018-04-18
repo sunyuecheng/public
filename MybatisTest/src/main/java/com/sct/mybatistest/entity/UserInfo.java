@@ -1,41 +1,32 @@
 package com.sct.mybatistest.entity;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "t_user_info")
 public class UserInfo {
-    @Id
-    //@GeneratedValue(strategy = GenerationType.NONE)
     private String id;
 
     private String name;
+
     private String password;
 
-    @Column(name = "real_name")
     private String realName;
 
-    @Column(name = "id_card")
     private String idCard;
 
-    @Column(name = "phone_num")
-    private String phoneNum;
+    private String phoneName;
 
-    @Column(name = "register_date")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date registerDate;
 
-    @Column(name = "last_view_date")
-    @Temporal(TemporalType.TIME)
     private Date lastViewDate;
+
+    private String phoneNum;
 
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id == null ? null : id.trim();
     }
 
     public String getName() {
@@ -43,7 +34,7 @@ public class UserInfo {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = name == null ? null : name.trim();
     }
 
     public String getPassword() {
@@ -51,7 +42,7 @@ public class UserInfo {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = password == null ? null : password.trim();
     }
 
     public String getRealName() {
@@ -59,7 +50,7 @@ public class UserInfo {
     }
 
     public void setRealName(String realName) {
-        this.realName = realName;
+        this.realName = realName == null ? null : realName.trim();
     }
 
     public String getIdCard() {
@@ -67,15 +58,15 @@ public class UserInfo {
     }
 
     public void setIdCard(String idCard) {
-        this.idCard = idCard;
+        this.idCard = idCard == null ? null : idCard.trim();
     }
 
-    public String getPhoneNum() {
-        return phoneNum;
+    public String getPhoneName() {
+        return phoneName;
     }
 
-    public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+    public void setPhoneName(String phoneName) {
+        this.phoneName = phoneName == null ? null : phoneName.trim();
     }
 
     public Date getRegisterDate() {
@@ -92,5 +83,13 @@ public class UserInfo {
 
     public void setLastViewDate(Date lastViewDate) {
         this.lastViewDate = lastViewDate;
+    }
+
+    public String getPhoneNum() {
+        return phoneNum;
+    }
+
+    public void setPhoneNum(String phoneNum) {
+        this.phoneNum = phoneNum == null ? null : phoneNum.trim();
     }
 }

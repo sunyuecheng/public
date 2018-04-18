@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans 
-            http://www.springframework.org/schema/beans/spring-beans.xsd" >
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="${druid.monitor.slowSqlMillis}"/>
+        <property name="logSlowSql" value="${druid.monitor.logSlowSql}"/>
+    </bean>
+
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        <property name="dataSourceLogEnabled" value="true" />
+        <property name="statementExecutableSqlLogEnable" value="true" />
+    </bean>
 
     <bean id="druidDataSource" destroy-method="close" init-method="init" class="com.alibaba.druid.pool.DruidDataSource" >
         <property name="driverClassName" value="${jdbc.connection.driverClassName}"/>
@@ -23,6 +36,26 @@
         <property name="testOnReturn" value="${druid.pool.testOnReturn}"/>
         <property name="poolPreparedStatements" value="${druid.pool.poolPreparedStatements}"/>
         <property name="maxPoolPreparedStatementPerConnectionSize" value="${druid.pool.maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter"/>
+                <ref bean="log-filter"/>
+            </list>
+        </property>
     </bean>
+
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor">
+    </bean>
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
+        <property name="patterns">
+            <list>
+                <value>com.sct.mailsecurityscanserver.dao.*</value>
+            </list>
+        </property>
+    </bean>
+
+    <aop:config proxy-target-class="true">
+        <aop:advisor advice-ref="druid-stat-interceptor" pointcut-ref="druid-stat-pointcut" />
+    </aop:config>
 
 </beans>

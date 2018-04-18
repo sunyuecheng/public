@@ -1,4 +1,4 @@
-package com.sct.mailsecurityscanserver.util;
+package com.sct.springsecuritytest.util;
 
 public class CommonFunction {
     public static String buildPwd() {

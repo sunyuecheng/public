@@ -1,9 +1,196 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sct.springsecuritytest.dao.IUserInfoDao">
+  <resultMap id="UserInfoResultMap" type="com.sct.springsecuritytest.entity.UserInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="phone_name" jdbcType="VARCHAR" property="phoneName" />
+    <result column="register_date" jdbcType="TIMESTAMP" property="registerDate" />
+    <result column="last_view_date" jdbcType="TIMESTAMP" property="lastViewDate" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+  </resultMap>
 
-<mapper namespace="userInfoMapper">
-    <select id="getUser" parameterType="int"
-            resultType="me.gacl.domain.User">
-        select * from users where id=#{id}
-    </select>
+  <resultMap id="UserRoleInfoResultMap" type="com.sct.springsecuritytest.entity.UserRoleInfo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="id_card" jdbcType="VARCHAR" property="idCard" />
+    <result column="phone_name" jdbcType="VARCHAR" property="phoneName" />
+    <result column="register_date" jdbcType="TIMESTAMP" property="registerDate" />
+    <result column="last_view_date" jdbcType="TIMESTAMP" property="lastViewDate" />
+    <result column="phone_num" jdbcType="VARCHAR" property="phoneNum" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_type" jdbcType="INTEGER" property="roleType" />
+  </resultMap>
+
+  <sql id="User_Info_Column_List">
+    id, name, password, real_name, id_card, phone_name, register_date, last_view_date,
+    phone_num
+  </sql>
+
+  <sql id="User_Role_Info_Column_List">
+    id, name, password, real_name, id_card, phone_name, register_date, last_view_date,
+    phone_num, role_name, role_type
+  </sql>
+
+  <select id="selectUserInfoById" parameterType="java.lang.String" resultMap="UserInfoResultMap">
+    select 
+    <include refid="User_Info_Column_List" />
+    from t_user_info
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectUserInfoByName" parameterType="java.lang.String" resultMap="UserInfoResultMap">
+    select
+    <include refid="User_Info_Column_List" />
+    from t_user_info
+    where name = #{name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectUserInfoList" resultMap="UserInfoResultMap">
+    select
+    <include refid="User_Info_Column_List" />
+    from t_user_info
+    where  register_date  #{registerDate} limit #{startIndex},#{pageSize}
+  </select>
+
+  <select id="selectUserRoleInfoByName" parameterType="java.lang.String" resultMap="UserRoleInfoResultMap">
+    select
+    a.id, a.name, a.password, a.real_name, a.id_card, a.phone_name, a.register_date, a.last_view_date,
+    a.phone_num, b.role_name, b.role_type
+    from t_user_info a, t_role_info b, t_user_role_info c
+    where name = #{name,jdbcType=VARCHAR}
+    and a.id==c.user_id and c.role_id= b.id
+  </select>
+
+  <select id="selectUserRoleInfoByName" parameterType="java.lang.String" resultMap="UserRoleInfoResultMap">
+    select
+    a.id, a.name, a.password, a.real_name, a.id_card, a.phone_name, a.register_date, a.last_view_date,
+    a.phone_num, b.role_name, b.role_type
+    from t_user_info a, t_role_info b, t_user_role_info c
+    where name = #{name,jdbcType=VARCHAR}
+    and a.id==c.user_id and c.role_id= b.id
+  </select>
+
+  <select id="selectUserRoleInfoByName" parameterType="java.lang.String" resultMap="UserRoleInfoResultMap">
+    select
+    a.id, a.name, a.password, a.real_name, a.id_card, a.phone_name, a.register_date, a.last_view_date,
+    a.phone_num, b.role_name, b.role_type
+    from t_user_info a, t_role_info b, t_user_role_info c
+    where name = #{name,jdbcType=VARCHAR}
+    and a.id==c.user_id and c.role_id= b.id
+  </select>
+
+  <select id="countByName" parameterType="java.lang.String" resultType="java.lang.Long">
+    select count(name) from t_user_info
+    where name= #{name,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insertUserInfo" parameterType="com.sct.springsecuritytest.entity.UserInfo">
+    insert into t_user_info (id, name, password, 
+      real_name, id_card, phone_name, 
+      register_date, last_view_date, phone_num
+      )
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{realName,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{phoneName,jdbcType=VARCHAR}, 
+      #{registerDate,jdbcType=TIMESTAMP}, #{lastViewDate,jdbcType=TIMESTAMP}, #{phoneNum,jdbcType=VARCHAR}
+      )
+  </insert>
+
+  <insert id="insertUserInfoSelective" parameterType="com.sct.springsecuritytest.entity.UserInfo">
+    insert into t_user_info
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="realName != null">
+        real_name,
+      </if>
+      <if test="idCard != null">
+        id_card,
+      </if>
+      <if test="phoneName != null">
+        phone_name,
+      </if>
+      <if test="registerDate != null">
+        register_date,
+      </if>
+      <if test="lastViewDate != null">
+        last_view_date,
+      </if>
+      <if test="phoneNum != null">
+        phone_num,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneName != null">
+        #{phoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null">
+        #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastViewDate != null">
+        #{lastViewDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phoneNum != null">
+        #{phoneNum,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateUserInfoByNameSelective" parameterType="com.sct.springsecuritytest.entity.UserInfo">
+    update t_user_info
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="realName != null">
+        real_name = #{realName,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null">
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneName != null">
+        phone_name = #{phoneName,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null">
+        register_date = #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastViewDate != null">
+        last_view_date = #{lastViewDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="phoneNum != null">
+        phone_num = #{phoneNum,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where name = #{name,jdbcType=VARCHAR}
+  </update>
 </mapper>
