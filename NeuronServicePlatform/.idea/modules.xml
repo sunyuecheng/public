@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/EurekaRegisterServer/EurekaRegisterServer.iml" filepath="$PROJECT_DIR$/EurekaRegisterServer/EurekaRegisterServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NeuronServicePlatform.iml" filepath="$PROJECT_DIR$/NeuronServicePlatform.iml" />
+      <module fileurl="file://$PROJECT_DIR$/NisslMessageDealServer/NisslMessageDealServer.iml" filepath="$PROJECT_DIR$/NisslMessageDealServer/NisslMessageDealServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SynapseConnectServer/SynapseConnectServer.iml" filepath="$PROJECT_DIR$/SynapseConnectServer/SynapseConnectServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SynapseUploadFileServer/SynapseUploadFileServer.iml" filepath="$PROJECT_DIR$/SynapseUploadFileServer/SynapseUploadFileServer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/config/config.iml" filepath="$PROJECT_DIR$/config/config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/define/define.iml" filepath="$PROJECT_DIR$/define/define.iml" />
+      <module fileurl="file://$PROJECT_DIR$/msg/msg.iml" filepath="$PROJECT_DIR$/msg/msg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/struct/struct.iml" filepath="$PROJECT_DIR$/struct/struct.iml" />
+      <module fileurl="file://$PROJECT_DIR$/util/util.iml" filepath="$PROJECT_DIR$/util/util.iml" />
+    </modules>
+  </component>
+</project>
